@@ -1,4 +1,4 @@
-const getAirState = async (connection) => {
+const requestAirState = async (connection) => {
 	const [rows] = await connection.query(`SELECT * FROM Sensor ORDER BY id DESC LIMIT 1`);
 	const data = rows[0];
 
@@ -49,5 +49,5 @@ const getAirState = async (connection) => {
 };
 
 module.exports = {
-	getAirState
+	requestAirState
 };
