@@ -1,6 +1,6 @@
 module.exports = async (socket, connection) => {
 	const getHistory = async () => {
-		let [rows] = await connection.query('SELECT pm2 AS value, timestamp FROM Sensor ORDER BY id DESC LIMIT 10');
+		let [rows] = await connection.query('SELECT CO2 AS value, timestamp FROM Sensor ORDER BY id DESC LIMIT 60');
 		rows.reverse();
 
 		const formatDate = (timestamp) => {
@@ -14,7 +14,7 @@ module.exports = async (socket, connection) => {
 		let history = rows.map((item) => {
 			return {
 				name: "pm2",
-				value: item.value,
+				value: item.value + 1000,
 				timestamp: formatDate(item.timestamp)
 			}
 		});

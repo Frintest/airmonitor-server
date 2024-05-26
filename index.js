@@ -14,7 +14,7 @@ const io = new Server(httpServer, {
 
 const setConnection = require('./db.js');
 
-const airStateSocket = require('./sockets/air-state.js');
+const { getAirState } = require('./sockets/air-state.js');
 const aiHistorySocket = require('./sockets/air-history.js');
 
 io.on('connection', async (socket) => {
@@ -22,13 +22,22 @@ io.on('connection', async (socket) => {
 
 	const db_connection = await setConnection();
 
-	await airStateSocket(socket, db_connection);
 	await aiHistorySocket(socket, db_connection);
 
+	const data = await getAirState(db_connection);
+	socket.emit("air-state:update", data);
+	let prevData = data;
+
 	let airStateInterval = setInterval(async () => {
-		await airStateSocket(socket, db_connection);
+		const data = await getAirState(db_connection);
+		const isChangeData = JSON.stringify(prevData) !== JSON.stringify(data);
+		prevData = data;
+
+		if (isChangeData) {
+			socket.emit("air-state:update", data);
+		}
 	}, 3000);
-	
+
 	let airHistoryInterval = setInterval(async () => {
 		await aiHistorySocket(socket, db_connection);
 	}, 3000);
