@@ -12,7 +12,7 @@ const io = new Server(httpServer, {
 	}
 });
 
-const { setConnection } = require("./db.js");
+const { setDBConnection } = require("./db.js");
 
 const { airStateHandlers } = require("./handlers/air-state/air-state-handlers.js");
 const { airHistoryHandlers } = require("./handlers/air-history/air-history-handlers.js");
@@ -21,7 +21,7 @@ const { airHistoryHandlers } = require("./handlers/air-history/air-history-handl
 const onConnection = async (socket) => {
 	console.log(`Socket ${socket.id} connect`);
 
-	const db_connection = await setConnection();
+	const db_connection = await setDBConnection();
 
 	airStateHandlers(socket, db_connection);
 	airHistoryHandlers(socket, db_connection);

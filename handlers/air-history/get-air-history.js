@@ -1,5 +1,5 @@
-const requestAirHistory = async (connection, itemName) => {
-	let [rows] = await connection.query(`SELECT ${itemName} AS value, timestamp FROM Sensor ORDER BY id DESC LIMIT 60`);
+const requestAirHistory = async (db_connection, itemName) => {
+	let [rows] = await db_connection.query(`SELECT ${itemName} AS value, timestamp FROM Sensor ORDER BY id DESC LIMIT 60`);
 	rows.reverse();
 
 	const formatDate = (timestamp) => {

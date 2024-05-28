@@ -1,8 +1,8 @@
-const requestAirState = async (connection) => {
-	const [rows] = await connection.query(`SELECT * FROM Sensor ORDER BY id DESC LIMIT 1`);
+const requestAirState = async (db_connection) => {
+	const [rows] = await db_connection.query(`SELECT * FROM Sensor ORDER BY id DESC LIMIT 1`);
 	const data = rows[0];
-	
-	return {
+
+	const airState = {
 		pm1: {
 			sensor_name: "pm1",
 			ui_name: "pm<sub>1",
@@ -46,6 +46,8 @@ const requestAirState = async (connection) => {
 			value: data.TVOC,
 		},
 	};
+
+	return airState;
 };
 
 module.exports = {
