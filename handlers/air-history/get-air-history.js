@@ -10,7 +10,7 @@ const requestAirHistory = async (connection, itemName) => {
 		return format;
 	};
 
-	let history = rows.map((item) => {
+	const history = rows.map((item) => {
 		return {
 			name: itemName,
 			value: item.value,

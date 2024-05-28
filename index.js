@@ -14,8 +14,8 @@ const io = new Server(httpServer, {
 
 const setConnection = require('./db.js');
 
-const { requestAirState } = require('./events/air-state.js');
-const { requestAirHistory } = require('./events/air-history.js');
+const { requestAirState } = require('./handlers/air-state.js');
+const { airHistoryHandlers } = require('./handlers/air-history/air-history-handlers.js');
 
 const onConnection = async (socket) => {
 	console.log('Server connected');
@@ -45,20 +45,9 @@ const onConnection = async (socket) => {
 		});
 	};
 
-	const airHistoryEvent = async (db_connection, itemName) => {
-		const airHistory = await requestAirHistory(db_connection, itemName);
-		console.log(airHistory);
-		socket.emit("air-history:update", airHistory);
-	};
-
-	const getHistoryItemEvent = async (db_connection) => {
-		socket.on('history-item:get', (itemName) => {
-			airHistoryEvent(db_connection, itemName); // fix
-		});
-	};
-
 	await airStateEvent(db_connection);
-	await getHistoryItemEvent(db_connection);
+
+	airHistoryHandlers(socket, db_connection);
 
 	socket.on("disconnect", () => {
 		console.log(`Socket ${socket.id} disconnect`);
