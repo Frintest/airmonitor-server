@@ -14,7 +14,7 @@ const airHistoryHandlers = (socket, db_connection) => {
 	};
 
 	getHistoryItem(db_connection);
-}
+};
 
 module.exports = {
 	airHistoryHandlers

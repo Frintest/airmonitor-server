@@ -8,6 +8,7 @@ const setConnection = async () => {
 		database: 'sensor',
 		password: 'jshdf^%hfjDfsbh$'
 	});
+	
 	return connection;
 };
 

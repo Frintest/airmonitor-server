@@ -1,7 +1,7 @@
 const requestAirState = async (connection) => {
 	const [rows] = await connection.query(`SELECT * FROM Sensor ORDER BY id DESC LIMIT 1`);
 	const data = rows[0];
-
+	
 	return {
 		pm1: {
 			sensor_name: "pm1",
