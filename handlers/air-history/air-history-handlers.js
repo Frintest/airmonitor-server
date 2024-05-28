@@ -18,4 +18,4 @@ const airHistoryHandlers = (socket, db_connection) => {
 
 module.exports = {
 	airHistoryHandlers
-}
+};

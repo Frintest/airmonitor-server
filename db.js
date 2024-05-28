@@ -11,4 +11,6 @@ const setConnection = async () => {
 	return connection;
 };
 
-module.exports = setConnection;
+module.exports = {
+	setConnection
+};
