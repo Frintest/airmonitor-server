@@ -16,6 +16,7 @@ const { setDBConnection } = require("./db.js");
 
 const { airStateHandlers } = require("./handlers/air-state/air-state-handlers.js");
 const { airHistoryHandlers } = require("./handlers/air-history/air-history-handlers.js");
+const { airStandardsHandlers } = require("./handlers/air-standards/air-standards-handlers.js");
 
 
 const onConnection = async (socket) => {
@@ -25,6 +26,7 @@ const onConnection = async (socket) => {
 
 	airStateHandlers(socket, db_connection);
 	airHistoryHandlers(socket, db_connection);
+	airStandardsHandlers(socket, db_connection);
 
 	socket.on("disconnect", () => {
 		console.log(`Socket ${socket.id} disconnect`);
