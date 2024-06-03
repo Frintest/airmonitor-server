@@ -6,10 +6,10 @@ const requestAirStandards = async (db_connection) => {
 	const createStandards = () => {
 		rows.forEach(item => {
 			const name = item.attr;
-			const isExist = name != "pm1" && name != "temp" && name != "humidity" && name != "eCO2";
-			// const isExist = item.isExist;
+			const isExist = item.isExist;
+
 			standards[name] = {
-				isExist,
+				isExist: isExist ? true : false,
 				content: isExist ? [] : null,
 				source: isExist ? item.source : null,
 			};
@@ -19,17 +19,18 @@ const requestAirStandards = async (db_connection) => {
 	const fullContent = () => {
 		rows.forEach(item => {
 			const name = item.attr;
-			const isExist = name != "pm1" && name != "temp" && name != "humidity" && name != "eCO2";
+			const standard = standards[name];
+
 			const obj = {
 				value: item.value,
 				text: item.description,
 				level: item.level
 			};
-			// const isExist = item.isExist;
-			if (isExist) {
+
+			if (standard.isExist) {
 				standards[name] = {
-					...standards[name],
-					content: [...standards[name].content, obj],
+					...standard,
+					content: [...standard.content, obj],
 				};
 			}
 		});
