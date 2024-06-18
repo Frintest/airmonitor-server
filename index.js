@@ -1,14 +1,22 @@
+const fs = require('fs');
+const https = require("https");
 const express = require("express");
-const { createServer } = require("http");
 const { Server } = require("socket.io");
 
 const PORT = 3001;
 const app = express();
 
-const httpServer = createServer(app);
-const io = new Server(httpServer, {
+const directory = `/etc/letsencrypt/live/airmonitor.servermc.ru-0001`;
+const ssl = {
+	key: fs.readFileSync(`${directory}/privkey.pem`),
+	cert: fs.readFileSync(`${directory}/fullchain.pem`),
+};
+
+const httpsServer = https.createServer(ssl, app);
+
+const io = new Server(httpsServer, {
 	cors: {
-		origin: ["http://localhost:3000", "http://airmonitor.servermc.ru"]
+		origin: ["http://localhost:3000", "https://airmonitor.servermc.ru"]
 	}
 });
 
@@ -36,6 +44,6 @@ const onConnection = async (socket) => {
 io.on('connection', onConnection);
 
 
-httpServer.listen(PORT, () => {
+httpsServer.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}`);
 });
