@@ -3,8 +3,9 @@ const { requestAirHistory } = require("./get-air-history.js");
 const airHistoryHandlers = (socket, db_connection) => {
 	const getAirHistory = async (db_connection, itemName) => {
 		const airHistory = await requestAirHistory(db_connection, itemName);
-		socket.emit("air-history:update", airHistory);
-		console.log('air-history:update');
+		socket.emit("air-history:update", airHistory, () => {
+			console.log("Event Confirm | air-history:update");
+		});
 	};
 
 	const getHistoryItem = (db_connection) => {
