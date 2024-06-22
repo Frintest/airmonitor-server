@@ -16,7 +16,10 @@ const httpsServer = https.createServer(ssl, app);
 
 const io = new Server(httpsServer, {
 	cors: {
-		origin: ["http://localhost:3000", "https://airmonitor.servermc.ru"]
+		origin: [
+			"http://localhost:3000",
+			"https://airmonitor.servermc.ru"
+		]
 	}
 });
 

@@ -5,7 +5,7 @@ const requestAirStandards = async (db_connection) => {
 
 	const createStandards = () => {
 		rows.forEach(item => {
-			const name = item.attr;
+			const name = item.name;
 			const isExist = item.isExist;
 
 			standards[name] = {
@@ -18,13 +18,13 @@ const requestAirStandards = async (db_connection) => {
 
 	const fullContent = () => {
 		rows.forEach(item => {
-			const name = item.attr;
+			const name = item.name;
 			const standard = standards[name];
 
 			const obj = {
-				value: item.value,
+				value: parseFloat(item.value),
 				text: item.description,
-				level: item.level
+				level: item.pollution_level,
 			};
 
 			if (standard.isExist) {
