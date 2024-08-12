@@ -4,10 +4,10 @@ import { airHistoryHandlers } from "./handlers/air-history/air-history-handlers.
 import { airStandardsHandlers } from "./handlers/air-standards/air-standards-handlers.js";
 
 export const main = (io) => {
-   const onConnection = (socket) => {
+   const onConnection = async (socket) => {
       console.log(`Socket ${socket.id} connect`);
 
-      const db_connection = setDBConnection();
+      const db_connection = await setDBConnection();
 		
       airStateHandlers(socket, db_connection);
       airHistoryHandlers(socket, db_connection);
