@@ -1,7 +1,7 @@
 import { requestAirState } from "./get-air-state.js";
 import { requestAirStateInfo } from "./get-air-state-info.js";
 
-const airStateHandlers = async (socket, db_connection) => {
+export const airStateHandlers = async (socket, db_connection) => {
    let isChangeAirState = false;
 
    const state = await requestAirState(db_connection);
@@ -31,8 +31,4 @@ const airStateHandlers = async (socket, db_connection) => {
    socket.on("disconnect", () => {
       clearInterval(airStateInterval);
    });
-};
-
-module.exports = {
-   airStateHandlers,
 };
