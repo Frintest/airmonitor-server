@@ -7,11 +7,11 @@ export const main = (io) => {
    const onConnection = async (socket) => {
       console.log(`Socket ${socket.id} connect`);
 
-      const db_connection = await setDBConnection();
+      // const db_connection = await setDBConnection();
 		
-      airStateHandlers(socket, db_connection);
-      airHistoryHandlers(socket, db_connection);
-      airStandardsHandlers(socket, db_connection);
+      // airStateHandlers(socket, db_connection);
+      // airHistoryHandlers(socket, db_connection);
+      // airStandardsHandlers(socket, db_connection);
 
       socket.on("disconnect", () => {
          console.log(`Socket ${socket.id} disconnect`);
