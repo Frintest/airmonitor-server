@@ -8,7 +8,6 @@ export const main = (io) => {
       console.log(`Socket ${socket.id} connect`);
 
       const db_connection = setDBConnection();
-
       airStateHandlers(socket, db_connection);
       airHistoryHandlers(socket, db_connection);
       airStandardsHandlers(socket, db_connection);
