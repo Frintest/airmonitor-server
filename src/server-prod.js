@@ -16,7 +16,7 @@ const io = new Server(httpsServer, {
 	},
 });
 
-main(io);
+// main(io);
 
 const PORT = 3001;
 httpsServer.listen(PORT, () => {
