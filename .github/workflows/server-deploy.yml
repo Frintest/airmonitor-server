@@ -1,0 +1,23 @@
+name: Server Deploy
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: ssh connect to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd /var/www/airmonitor/server
+            git pull origin master
+            npm i
+            pm2 restart ./src/server-prod.js
+            exit
