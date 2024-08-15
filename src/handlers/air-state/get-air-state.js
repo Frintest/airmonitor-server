@@ -44,7 +44,7 @@ export const requestAirState = async (db_connection) => {
       eCO2: {
          sensor_name: "eCO2",
          ui_name: "eCO<sub>2",
-         unit: "μg/m<sup>3", // todo
+         unit: "μg/m<sup>3",
          value: data.eCO2,
       },
       TVOC: {

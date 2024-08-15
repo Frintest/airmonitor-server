@@ -1,34 +1,40 @@
 import { requestAirState } from "./get-air-state.js";
-import { requestAirStateInfo } from "./get-air-state-info.js";
+import { requestLastTimestamp, requestAirMeta } from "./get-air-meta.js";
 
-export const airStateHandlers = async (socket, db_connection) => {
+export const airStateHandlers = (socket, db_connection) => {
+   const sleep = (duration) => {
+      return new Promise((resolve) => setTimeout(resolve, duration));
+   };
+
+   let timestampCache = null;
    let isChangeAirState = false;
+   const checkInterval = 5000;
+   let isSocketConnection = true;
 
-   const state = await requestAirState(db_connection);
-   const info = await requestAirStateInfo(db_connection);
-   const data = { info, state };
-
-   socket.emit("air-state:update", data, () => {
-      console.log("Event Confirm | air-state:update");
-   });
-
-   let prevData = data;
-
-   let airStateInterval = setInterval(async () => {
-      const state = await requestAirState(db_connection);
-      const info = await requestAirStateInfo(db_connection);
-      const data = { info, state };
-      isChangeAirState = JSON.stringify(prevData) !== JSON.stringify(data);
-      prevData = data;
+   const checkUpdatingAirState = async () => {
+      const timestamp = await requestLastTimestamp(db_connection);
+      isChangeAirState = String(timestampCache) !== String(timestamp);
+      timestampCache = timestamp;
 
       if (isChangeAirState) {
+         isChangeAirState = false;
+         const info = await requestAirMeta(db_connection);
+         const state = await requestAirState(db_connection);
+         const data = { info, state };
          socket.emit("air-state:update", data, () => {
             console.log("Event Confirm | air-state:update");
          });
       }
-   }, 5000);
+
+      await sleep(checkInterval);
+      if (isSocketConnection) {
+         await checkUpdatingAirState();
+      }
+   };
+
+   checkUpdatingAirState();
 
    socket.on("disconnect", () => {
-      clearInterval(airStateInterval);
+      isSocketConnection = false;
    });
 };

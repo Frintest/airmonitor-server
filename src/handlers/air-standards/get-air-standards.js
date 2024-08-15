@@ -6,39 +6,30 @@ export const requestAirStandards = async (db_connection) => {
    const createStandards = () => {
       rows.forEach((item) => {
          const name = item.name;
-         const isExist = item.isExist;
 
-         standards[name] = {
-            isExist: isExist ? true : false,
-            content: isExist ? [] : null,
-            source: isExist ? item.source : null,
-         };
-      });
-   };
-
-   const fullContent = () => {
-      rows.forEach((item) => {
-         const name = item.name;
-         const standard = standards[name];
-
-         const obj = {
-            value: parseFloat(item.value),
-            text: item.description,
-            level: item.pollution_level,
-         };
-
-         if (standard.isExist) {
-            standards[name] = {
-               ...standard,
-               content: [...standard.content, obj],
+         if (item.isExist) {
+            const contentItem = {
+               value: parseFloat(item.value),
+               text: item.description,
+               level: item.pollution_level,
             };
+
+            if (!standards[name]) {
+               standards[name] = {
+                  isExist: true,
+                  source: item.source,
+                  content: [],
+               };
+            }
+
+            standards[name].content.push(contentItem);
+         } else {
+            standards[name] = {};
          }
       });
    };
 
    createStandards();
-   fullContent();
-
    return standards;
 };
 

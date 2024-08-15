@@ -15,5 +15,5 @@ main(io);
 dotenv.config();
 const SERVER_PORT = process.env.SERVER_PORT;
 httpServer.listen(SERVER_PORT, () => {
-   console.log(`\nServer is running on port ${SERVER_PORT}`);
+   console.log(`Server is running on port ${SERVER_PORT}`);
 });
