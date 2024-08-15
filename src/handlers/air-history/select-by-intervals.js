@@ -1,53 +1,7 @@
-export const selectByIntervals = (raw_history, every) => {
-   const calcInterval = (every) => {
-      const daysInMonth = 31; // todo
-      const hoursInDay = 24;
-      const minutesInHour = 60;
-      const secondsInMinute = 60;
-      const millisecondsInSecond = 1000;
+import { requestAirHistory } from "./request-air-history.js";
+import { computeInterval } from "./compute-interval.js";
 
-      let intervalElements = Object.values(every).map((item) => {
-         if (item.value) {
-            switch (item.name) {
-               case "month":
-                  return (
-                     item.value *
-                     daysInMonth *
-                     hoursInDay *
-                     minutesInHour *
-                     secondsInMinute *
-                     millisecondsInSecond
-                  );
-
-               case "days":
-                  return (
-                     item.value *
-                     hoursInDay *
-                     minutesInHour *
-                     secondsInMinute *
-                     millisecondsInSecond
-                  );
-
-               case "hours":
-                  return (
-                     item.value *
-                     minutesInHour *
-                     secondsInMinute *
-                     millisecondsInSecond
-                  );
-
-               case "minutes":
-                  return item.value * secondsInMinute * millisecondsInSecond;
-            }
-         }
-         return 0;
-      });
-
-      const sum = (arr) => arr.reduce((acc, num) => acc + num, 0);
-      const interval = sum(intervalElements);
-      return interval;
-   };
-
+export const selectByIntervals = async (db_connection, data) => {
    const selectRows = (raw_history, originalInterval) => {
       let selectedRows = [];
       selectedRows.push(raw_history[0]);
@@ -91,7 +45,14 @@ export const selectByIntervals = (raw_history, every) => {
       return selectedRows;
    };
 
-   const interval = calcInterval(every);
+   const { name, range, date, every } = data;
+   const raw_history = await requestAirHistory(
+      name,
+      range,
+      date,
+      db_connection,
+   );
+   const interval = computeInterval(every);
    const history = selectRows(raw_history, interval);
    return history;
 };

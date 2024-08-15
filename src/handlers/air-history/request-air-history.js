@@ -1,4 +1,4 @@
-export const createHistorySql = (name, range, date) => {
+export const requestAirHistory = async (name, range, date, db_connection) => {
    const createRangeSql = (range) => {
       switch (range) {
          case "custom": {
@@ -26,16 +26,17 @@ export const createHistorySql = (name, range, date) => {
 
    const rangeSql = createRangeSql(range);
 
-   const historySQL = `
+   const sql = `
 		SELECT ${name} AS value, timestamp
 		FROM Sensor
 		${rangeSql}
-		ORDER BY id DESC
 	`;
 
+   // bug
    // WHERE timestamp >= NOW() - INTERVAL 2 DAY
    // WHERE timestamp BETWEEN '2024-07-03 08:00:56' AND '2024-07-03 23:20:56'
    // LIMIT 2000
 
-   return historySQL;
+   const [history] = await db_connection.query(sql);
+   return history;
 };
