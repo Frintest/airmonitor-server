@@ -16,7 +16,7 @@ export const createDBConnection = async () => {
       password: MYSQL_PASSWORD,
       database: MYSQL_DATABASE,
       decimalNumbers: true,
-      timezone: "+03:00", // Moscow // TODO time on server
+      timezone: "+03:00",
    });
 
    return connection;
