@@ -4,11 +4,10 @@ import { computeInterval } from "./compute-interval.js";
 export const selectByIntervals = async (db_connection, data) => {
    const selectRows = (raw_history, originalInterval) => {
       let selectedRows = [];
-      selectedRows.push(raw_history[0]);
-
       let beginRow = raw_history[0];
       let beginDate = new Date(beginRow.timestamp);
       let beginTime = beginDate.getTime();
+      selectedRows.push(beginRow);
 
       for (let i = 1; i < raw_history.length - 2; i++) {
          const currentRow = raw_history[i];

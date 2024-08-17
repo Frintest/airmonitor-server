@@ -1,5 +1,5 @@
 export const requestAirHistory = async (name, range, date, db_connection) => {
-   const createRangeSql = (range) => {
+   const selectIntervalSql = (range) => {
       switch (range) {
          case "custom": {
             const dateFrom = date.from;
@@ -24,19 +24,12 @@ export const requestAirHistory = async (name, range, date, db_connection) => {
       }
    };
 
-   const rangeSql = createRangeSql(range);
-
+   const intervalSql = selectIntervalSql(range);
    const sql = `
 		SELECT ${name} AS value, timestamp
 		FROM Sensor
-		${rangeSql}
+		${intervalSql}
 	`;
-
-   // bug
-   // WHERE timestamp >= NOW() - INTERVAL 2 DAY
-   // WHERE timestamp BETWEEN '2024-07-03 08:00:56' AND '2024-07-03 23:20:56'
-   // LIMIT 2000
-
    const [history] = await db_connection.query(sql);
    return history;
 };
